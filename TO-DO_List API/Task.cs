@@ -23,5 +23,10 @@ namespace TO_DO_List_API
         {
             isCompleted = !isCompleted;
         }
+
+        public void ChangeText(string newText) 
+        { 
+            text = newText;
+        }
     }
 }

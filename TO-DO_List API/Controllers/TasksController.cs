@@ -32,5 +32,45 @@ namespace TO_DO_List_API.Controllers
         {
             return storage.GetTasksList().FirstOrDefault(wi => wi.id == id);
         }
+
+        [HttpDelete("{id}")]
+        public IEnumerable<Task> Delete(int id)
+        {
+            storage.DeleteTask(storage.GetTasksList().FirstOrDefault(wi => wi.id == id));
+
+            return Enumerable.Range(0, storage.GetLength()).Select(index =>
+            storage.GetTask(index)).
+            ToArray();
+        }
+
+        [HttpPut]
+        public IEnumerable<Task> Put(int id)
+        {
+            storage.UpdateTask(id);
+
+            return Enumerable.Range(0, storage.GetLength()).Select(index =>
+            storage.GetTask(index)).
+            ToArray();
+        }
+
+        [HttpPut("{id}")]
+        public IEnumerable<Task> Put(int id, string newText)
+        {
+            storage.UpdateTask(id, newText);
+
+            return Enumerable.Range(0, storage.GetLength()).Select(index =>
+            storage.GetTask(index)).
+            ToArray();
+        }
+
+        [HttpPost]
+        public IEnumerable<Task> Post(string text)
+        {
+            storage.AddTask(new Task(storage.GetId(), text));
+
+            return Enumerable.Range(0, storage.GetLength()).Select(index =>
+            storage.GetTask(index)).
+            ToArray();
+        }
     }
 }

@@ -36,5 +36,20 @@
         {
             return tasks;
         }
+
+        public void DeleteTask(Task task)
+        {
+            tasks.Remove(task);
+        }
+
+        public void UpdateTask(int id)
+        {
+            tasks.FirstOrDefault(wi => wi.id == id).CheckTask();
+        }
+
+        public void UpdateTask(int id, string newText)
+        {
+            tasks.FirstOrDefault(wi => wi.id == id).ChangeText(newText);
+        }
     }
 }
