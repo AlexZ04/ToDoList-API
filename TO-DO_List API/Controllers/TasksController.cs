@@ -19,5 +19,30 @@ namespace TO_DO_List_API.Controllers
             _logger = logger;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAllNotes()
+        {
+            var notes = await _context.Notes.ToListAsync();
+
+            return Ok(notes);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetNote(int id)
+        {
+            var note = await _context.Notes.FindAsync(id);
+
+            return note != null ? Ok(note) : NotFound();
+        }
+
+        //[HttpPost]
+        //public async Task<IActionResult> CreateNote(string text)
+        //{
+        //    var note = new Note(text);
+        //    _context.Notes.Add(note);
+        //    await _context.SaveChangesAsync();
+        //    return CreatedAtAction(nameof(GetNoteById), new { id = note.Id }, note);
+        //}
+
     }
 }
