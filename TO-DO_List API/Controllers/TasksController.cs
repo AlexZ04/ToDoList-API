@@ -35,14 +35,14 @@ namespace TO_DO_List_API.Controllers
             return note != null ? Ok(note) : NotFound();
         }
 
-        [HttpPost]
+        [HttpPost("{text}")]
         public async Task<IActionResult> CreateNote(string text)
         {
             var note = new Note(text);
             _context.Notes.Add(note);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetNote), new {id = note.Id}, note);
+            return CreatedAtAction(nameof(GetNote), new { id = note.Id }, note);
         }
 
         [HttpDelete]
@@ -59,6 +59,39 @@ namespace TO_DO_List_API.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> CheckNote(int id)
+        {
+            var note = await _context.Notes.FindAsync(id);
+
+            if (note == null)
+            {
+                return BadRequest();
+            }
+            
+            note.IsCompleted = !note.IsCompleted;
+
+            _context.SaveChanges();
+
+            return Ok(note);
+        }
+
+        [HttpPut("{id}/{text}")]
+        public async Task<IActionResult> ChangeNoteText(int id, string text)
+        {
+            var note = await _context.Notes.FindAsync(id);
+
+            if (note == null || text == null)
+            {
+                return BadRequest();
+            }
+
+            note.Text = text;
+            _context.SaveChanges();
+
+            return Ok(note);
         }
     }
 }
