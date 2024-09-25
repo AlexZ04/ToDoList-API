@@ -71,7 +71,7 @@ namespace TO_DO_List_API.Controllers
             return NoContent();
         }
 
-        [HttpPatch("{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> CheckNote(int id)
         {
             var note = await _context.Notes.FindAsync(id);
