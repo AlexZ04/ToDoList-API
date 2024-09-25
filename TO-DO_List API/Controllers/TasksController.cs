@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using TO_DO_List_API.Data;
 using TO_DO_List_API.Data.Models;
 
@@ -43,6 +42,17 @@ namespace TO_DO_List_API.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetNote), new { id = note.Id }, note);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadList(List<Note> notes)
+        {
+            //_context.Database.ExecuteSqlRaw("TRUNCATE TABLE notes RESTART IDENTITY;");
+            _context.Notes.RemoveRange(_context.Notes);
+
+            _context.Notes.AddRange(notes);
+            await _context.SaveChangesAsync();
+            return Ok(notes);
         }
 
         [HttpDelete]
