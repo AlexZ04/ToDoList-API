@@ -35,14 +35,14 @@ namespace TO_DO_List_API.Controllers
             return note != null ? Ok(note) : NotFound();
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> CreateNote(string text)
-        //{
-        //    var note = new Note(text);
-        //    _context.Notes.Add(note);
-        //    await _context.SaveChangesAsync();
-        //    return CreatedAtAction(nameof(GetNoteById), new { id = note.Id }, note);
-        //}
+        [HttpPost]
+        public async Task<IActionResult> CreateNote(string text)
+        {
+            var note = new Note(text);
+            _context.Notes.Add(note);
+            await _context.SaveChangesAsync();
 
+            return CreatedAtAction(nameof(GetNote), new {id = note.Id}, note);
+        }
     }
 }
