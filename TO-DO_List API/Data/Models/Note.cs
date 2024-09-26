@@ -1,10 +1,12 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
 
 namespace TO_DO_List_API.Data.Models
 {
     public class Note
     {
         public int Id { get; set; }
+        [Required]
         public string Text { get; set; }
         public bool IsCompleted { get; set; }
 
