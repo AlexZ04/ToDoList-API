@@ -34,17 +34,18 @@ namespace TO_DO_List_API.Controllers
             return note != null ? Ok(note) : NotFound();
         }
 
-        [HttpPost("{text}")]
-        public async Task<IActionResult> CreateNote(string text)
+        [HttpPost]
+        public async Task<IActionResult> CreateNote([FromBody] NoteDTO noteDTO)
         {
-            var note = new Note(text);
+            var note = new Note { Text = noteDTO.Text, IsCompleted = noteDTO.IsCompleted };
+
             _context.Notes.Add(note);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetNote), new { id = note.Id }, note);
         }
 
-        [HttpPost]
+        [HttpPost("upload")]
         public async Task<IActionResult> UploadList(List<Note> notes)
         {
             //_context.Database.ExecuteSqlRaw("TRUNCATE TABLE notes RESTART IDENTITY;");
@@ -55,7 +56,7 @@ namespace TO_DO_List_API.Controllers
             return Ok(notes);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteNote(int id)
         {
             var note = await _context.Notes.FindAsync(id);
@@ -88,17 +89,18 @@ namespace TO_DO_List_API.Controllers
             return Ok(note);
         }
 
-        [HttpPut("{id}/{text}")]
-        public async Task<IActionResult> ChangeNoteText(int id, string text)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> ChangeNoteText(int id, [FromBody] NoteDTO newNote)
         {
             var note = await _context.Notes.FindAsync(id);
 
-            if (note == null || text == null)
+            if (note == null || newNote.Text == null)
             {
                 return BadRequest();
             }
 
-            note.Text = text;
+            note.Text = newNote.Text;
+            note.IsCompleted = newNote.IsCompleted;
             _context.SaveChanges();
 
             return Ok(note);
