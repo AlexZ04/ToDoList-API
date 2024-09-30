@@ -46,12 +46,19 @@ namespace TO_DO_List_API.Controllers
         }
 
         [HttpPost("upload")]
-        public async Task<IActionResult> UploadList(List<Note> notes)
+        public async Task<IActionResult> UploadList(List<NoteDTO> notes)
         {
-            //_context.Database.ExecuteSqlRaw("TRUNCATE TABLE notes RESTART IDENTITY;");
-            _context.Notes.RemoveRange(_context.Notes);
+            _context.Database.ExecuteSqlRaw("TRUNCATE TABLE notes RESTART IDENTITY;");
+            //_context.Notes.RemoveRange(_context.Notes);
 
-            _context.Notes.AddRange(notes);
+            List <Note> newList = new List<Note>();
+
+            foreach (NoteDTO note in notes)
+            {
+                newList.Add(new Note { Text = note.Text, IsCompleted = note.IsCompleted });
+            }
+
+            _context.Notes.AddRange(newList);
             await _context.SaveChangesAsync();
             return Ok(notes);
         }
